@@ -1,0 +1,23 @@
+
+# python and jupyter Notebook #
+.ipynb_checkpoints
+__pycache__/
+tools/__pycache__/
+*.ipynb_checkpoints
+*.ipynb
+# Virtualenv #
+venv/
+env/
+
+# Environments #
+.env
+.env.*
+
+# directories #
+books/
+planing/
+
+# neo4j dumps and temp graphs#
+*.dump
+*.json
+Neo4j-54fe9d5f-Created-2024-07-10.txt
