@@ -25,7 +25,7 @@
 
 1. **Add Files to the Books Directory**
 
-   Place the relevant files into the `books` directory.
+   Place the relevant files into a dirctory, and change "PATH" variable in Insert_to_the_graph.py to the directory path. i use the `books` directory.
 
 2. **Run the Insert_to_the_graph Script**
 
