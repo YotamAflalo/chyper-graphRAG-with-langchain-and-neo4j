@@ -1,11 +1,12 @@
 from graph import driver
-DELETE_QUERIES = [
-        "MATCH (:Food)-[r:CAN_PREVENT]->(:Food) DELETE r",
-        "MATCH (:Food)-[r:CAN_PREVENT]->(n:`Body organ`) DELETE r",
-        "MATCH (:Food)-[r:CONTAINS]->(:Body organ) DELETE r",
-        "MATCH (:Physical activity)-[r:CONTAINS]->(:Microbiological component) DELETE r",
-        "MATCH (:Food)-[r:CAN_PREVENT]->(:Micro organisem) DELETE r"
-    ]
+from config import DELETE_QUERIES
+# DELETE_QUERIES = [
+#         "MATCH (:Food)-[r:CAN_PREVENT]->(:Food) DELETE r",
+#         "MATCH (:Food)-[r:CAN_PREVENT]->(n:`Body organ`) DELETE r",
+#         "MATCH (:Food)-[r:CONTAINS]->(:Body organ) DELETE r",
+#         "MATCH (:Physical activity)-[r:CONTAINS]->(:Microbiological component) DELETE r",
+#         "MATCH (:Food)-[r:CAN_PREVENT]->(:Micro organisem) DELETE r"
+#     ]
 
 def delete_connections(driver,delete_queries:list=[]):
 

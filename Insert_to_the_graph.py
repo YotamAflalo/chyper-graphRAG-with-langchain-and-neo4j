@@ -10,7 +10,7 @@ from langchain_community.graphs import Neo4jGraph
 from langchain_experimental.graph_transformers import LLMGraphTransformer
 from langchain_openai import ChatOpenAI
 from graph import driver
-
+from config import ALLOWED_NODES, ALLOWED_RELETIONSHIPS, RELETIONSHIPS_PROPERTIES, NODES_PROPERTIES
 from langchain_core.documents import Document
 from PyPDF2 import PdfReader
 gpt4o = ChatOpenAI(temperature=0, model_name="gpt-4o")
@@ -87,12 +87,13 @@ def generate_prompt(doc_content):
     """
     return prompt_template.format(
         doc_content=doc_content,
-        allowed_nodes=','.join(['food', 'nutritional supplement','nutritional value','microbiological component', 'drug', 'medical procedure',
-                                'body organ', 'disease', 'physical activity','micro organisem']),
-        allowed_relationships=','.join(['CONTAINS', 'ARE_KIND_OF','CAN_LEAD_TO', 'CAN_PREVENT','CAN_REDUCE','REQUIRED_FOR']),
-        relationship_properties=','.join(['Grounding_text','effect_mechanism','cost','The_intensity_of_the_effect','Life extension/shortening period']),
-        node_properties=','.join(['amount_required','group','cost','amount'])
+        allowed_nodes=','.join(ALLOWED_NODES),
+        allowed_relationships=','.join(ALLOWED_RELETIONSHIPS),
+        relationship_properties=','.join(RELETIONSHIPS_PROPERTIES),
+        node_properties=','.join(NODES_PROPERTIES)
     )
+
+
 
 i = 1
 
@@ -112,11 +113,11 @@ for doc_name, documents in documents_dict.items():
         prompt_callable = lambda doc_content=doc.page_content: generate_prompt(doc_content)
         llm_transformer_props = LLMGraphTransformer(
             llm=gpt4o,
-            allowed_nodes=['food', 'nutritional supplement','nutritional value','microbiological component', 'drug', 'medical procedure',
-                        'body organ', 'disease', 'physical activity','micro organisem'],
-            allowed_relationships=['CONTAINS', 'ARE_KIND_OF','CAN_LEAD_TO', 'CAN_PREVENT','CAN_REDUCE','REQUIRED_FOR'],
-            relationship_properties=['Grounding_text','effect_mechanism','cost','The_intensity_of_the_effect','Life extension/shortening period'],
-            node_properties=['meaning','amount_required','group','cost','amount'],
+            allowed_nodes=ALLOWED_NODES,
+            allowed_relationships=ALLOWED_RELETIONSHIPS,
+            relationship_properties=RELETIONSHIPS_PROPERTIES,
+            node_properties=NODES_PROPERTIES,
+            
             prompt=prompt_callable  # Pass the callable prompt
         )
 
