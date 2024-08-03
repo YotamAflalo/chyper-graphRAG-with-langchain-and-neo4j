@@ -58,14 +58,15 @@ An example of the chat-bot's response in the streamlit interface:
    you mey update the prompt_templete at the `Insert_to_the_graph` script as well.
 
 
-2.  **Run the Insert_to_the_graph Script**
+3.  **Run the Insert_to_the_graph Script**
 
    Extract nodes and upload them to AuraDB by running:
+   
    ```bash
    python Insert_to_the_graph.py
    ```
 
-3. **Run the clean_graph Script**
+4. **Run the clean_graph Script**
 
    Clean up irrelevant relationships by running:
    ```bash
