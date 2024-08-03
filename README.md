@@ -88,5 +88,5 @@ An example of the chat-bot's response in the streamlit interface:
 
    To start the bot, run:
    ```bash
-   python bot.py
+   streamlit run bot.py
    ```
