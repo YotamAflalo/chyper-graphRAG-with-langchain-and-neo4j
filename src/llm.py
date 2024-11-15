@@ -14,14 +14,14 @@ from langchain_openai import OpenAIEmbeddings
 langchain_embeddings = OpenAIEmbeddings(model="text-embedding-3-small") #for the vector tool
 
 
-# how to use
-# embedding_instance = OpenAIEmbedding(model="text-embedding-3-small")
-# embedding = embedding_instance.get_embedding("Your text here")
-# print(embedding[:20])
-
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
-from llm_config import anthropic_chat_model, anthropic_cypher_model
+import sys
+from pathlib import Path
+
+project_root = str(Path(__file__).parent.parent)
+sys.path.append(project_root)
+from config.llm_config import anthropic_chat_model, anthropic_cypher_model
 chat_model = ChatAnthropic(
     model=anthropic_chat_model,
     temperature=0,

@@ -1,11 +1,15 @@
 #tools for vector sherch - embeddig
-import sys
 import os
 
 # adding paths for easy lmport
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from llm import chat_model,langchain_embeddings
-from graph import driver
+# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import sys
+from pathlib import Path
+
+project_root = str(Path(__file__).parent.parent.parent.parent)
+sys.path.append(project_root)
+from src.llm import chat_model,langchain_embeddings
+from src.graph import driver
 
 from langchain_community.vectorstores.neo4j_vector import Neo4jVector
 from langchain.chains.combine_documents import create_stuff_documents_chain
