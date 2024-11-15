@@ -1,6 +1,11 @@
 import streamlit as st
-from utils import write_message
-from agent import generate_response
+import sys
+from pathlib import Path
+
+project_root = str(Path(__file__).parent.parent.parent)
+sys.path.append(project_root)
+from src.utils import write_message
+from src.agent.agent import generate_response
 # Page Config
 st.set_page_config("Intelligent nutrition bot", page_icon="🥦")
 

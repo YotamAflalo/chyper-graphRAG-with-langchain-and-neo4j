@@ -1,6 +1,4 @@
 PATH = 'books'
-
-import getpass
 import os
 import json
 import glob
@@ -9,13 +7,17 @@ from langchain_community.graphs import Neo4jGraph
 
 from langchain_experimental.graph_transformers import LLMGraphTransformer
 from langchain_openai import ChatOpenAI
-from graph import driver
-from config import ALLOWED_NODES, ALLOWED_RELETIONSHIPS, RELETIONSHIPS_PROPERTIES, NODES_PROPERTIES
+import sys
+from pathlib import Path
+
+project_root = str(Path(__file__).parent.parent.parent)
+sys.path.append(project_root)
+from src.graph import driver
+from config.neo4j_config import ALLOWED_NODES, ALLOWED_RELETIONSHIPS, RELETIONSHIPS_PROPERTIES, NODES_PROPERTIES
 from langchain_core.documents import Document
 from PyPDF2 import PdfReader
-gpt4o = ChatOpenAI(temperature=0, model_name="gpt-4o")
 
-from llm import my_OpenAIEmbedding
+from src.llm import my_OpenAIEmbedding, gpt4o
 
 llm_embedder = my_OpenAIEmbedding(model = 'text-embedding-3-small')
 def dump_graph(graph_documents_props,driver:Neo4jGraph):
@@ -104,7 +106,7 @@ pdf_files = glob.glob(os.path.join(PATH, "*.pdf"))
 documents_dict ={}
 for path in pdf_files:
     print(path)
-    text = full_book_constraction(path=path,starting_page=300, ending_page=301)
+    text = full_book_constraction(path=path,starting_page=302, ending_page=303)
     documents = documents_constractor(text)
     documents_dict[path] = documents
     

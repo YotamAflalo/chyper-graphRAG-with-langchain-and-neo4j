@@ -1,11 +1,13 @@
 #tool for chyper sherch
-import sys
 import os
+import sys
+from pathlib import Path
 
+project_root = str(Path(__file__).parent.parent.parent.parent)
+sys.path.append(project_root)
 # adding paths for easy lmport
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from llm import chat_model,chyper_model
-from graph import driver
+from src.llm import chat_model,chyper_model
+from src.graph import driver
 from langchain_community.chains.graph_qa.cypher import GraphCypherQAChain
 from langchain.prompts.prompt import PromptTemplate
 
@@ -43,12 +45,10 @@ Do not use any other relationship types or properties that are not provided.
 
 Do not return entire nodes or embedding properties.
 
-Fine Tuning:
-- make shure to use correct Cypher. 
-- if you reffering to type with more then one word in his name, use `type name`, for example: (nutrient:`Nutritional value`)
+instractions:
+- ***all the id's starts with capital leter (like "Plant-Based Diet", or "Turmeric")
+- if you reffering to type with more then one word in his name, use `type name`, for example: (nv:`Nutritional value`)
 - try not to over complicat things
-- case sensitivity: note that names may start with an upper/lowercase letter, and appear in the singular/plural. 
- Search in a way that includes all the options (e.g. cancer or Cancer or cancers).
 - If you need to pass the result of the aggregation function of another aggregation function, do it through the WITH
 
 Example Cypher Statements:

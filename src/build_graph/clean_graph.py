@@ -1,5 +1,10 @@
-from graph import driver
-from config import DELETE_QUERIES
+import sys
+from pathlib import Path
+
+project_root = str(Path(__file__).parent.parent.parent)
+sys.path.append(project_root)
+from src.graph import driver
+from config.neo4j_config import DELETE_QUERIES
 # DELETE_QUERIES = [
 #         "MATCH (:Food)-[r:CAN_PREVENT]->(:Food) DELETE r",
 #         "MATCH (:Food)-[r:CAN_PREVENT]->(n:`Body organ`) DELETE r",

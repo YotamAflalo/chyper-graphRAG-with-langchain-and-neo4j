@@ -1,5 +1,11 @@
-from llm import chat_model
-from graph import driver
+import sys
+from pathlib import Path
+
+project_root = str(Path(__file__).parent.parent.parent)
+sys.path.append(project_root)
+
+from src.llm import chat_model
+from src.graph import driver
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
@@ -8,10 +14,10 @@ from langchain_community.chat_message_histories import Neo4jChatMessageHistory
 from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain import hub
-from utils import get_session_id
+from src.utils import get_session_id
 
-from tools.vector import get_doc_text
-from tools.cypher import cypher_qa
+from src.agent.tools.vector import get_doc_text
+from src.agent.tools.cypher import cypher_qa
 
 chat_prompt = ChatPromptTemplate.from_messages(
      [
