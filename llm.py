@@ -1,7 +1,7 @@
 
 from openai import OpenAI
 import os
-class OpenAIEmbedding:
+class my_OpenAIEmbedding:
     def __init__(self,model = "text-embedding-3-small"):
         self.client = OpenAI()
         self.model = model
@@ -11,7 +11,7 @@ class OpenAIEmbedding:
         return self.client.embeddings.create(input=[text], model=self.model).data[0].embedding
 from langchain_openai import OpenAIEmbeddings
 
-langchain_embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+langchain_embeddings = OpenAIEmbeddings(model="text-embedding-3-small") #for the vector tool
 
 
 # how to use
@@ -21,23 +21,23 @@ langchain_embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
-
+from llm_config import anthropic_chat_model, anthropic_cypher_model
 chat_model = ChatAnthropic(
-    model="claude-3-5-sonnet-20240620",
+    model=anthropic_chat_model,
     temperature=0,
     max_tokens=1024,
     timeout=None,
     max_retries=2,
     api_key= os.getenv('CLAUDE_KEY')
 )
-messages = [
-    (
-        "system",
-        "You are a helpful assistant that translates English to French. Translate the user sentence.",
-    ),
-    ("human", "I love programming."),
-]
-# ai_msg = chat_model.invoke(messages)
-# print(ai_msg)
+
+chyper_model = ChatAnthropic(
+    model=anthropic_cypher_model,
+    temperature=0,
+    max_tokens=1024,
+    timeout=None,
+    max_retries=2,
+    api_key= os.getenv('CLAUDE_KEY')
+)
 
 gpt4o = ChatOpenAI(temperature=0, model_name="gpt-4o")

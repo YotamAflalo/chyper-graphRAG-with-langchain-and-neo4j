@@ -15,8 +15,9 @@ from langchain_core.documents import Document
 from PyPDF2 import PdfReader
 gpt4o = ChatOpenAI(temperature=0, model_name="gpt-4o")
 
-from llm import OpenAIEmbedding
-llm_embedder = OpenAIEmbedding(model = 'text-embedding-3-small')
+from llm import my_OpenAIEmbedding
+
+llm_embedder = my_OpenAIEmbedding(model = 'text-embedding-3-small')
 def dump_graph(graph_documents_props,driver:Neo4jGraph):
     
     # Store to neo4j
@@ -53,8 +54,8 @@ def documents_constractor(full_book):
     docs = [Document(doc) for doc in text_splitter.split_text(full_book)]
     print(type(docs[0]))
     return docs
-text = full_book_constraction(path="books/How_Not_to_Die.pdf") #,starting_page=10,ending_page=200) 
-documents = documents_constractor(text)
+# text = full_book_constraction(path="books/How_Not_to_Die.pdf",starting_page=10,ending_page=11) 
+# documents = documents_constractor(text)
 
 def generate_prompt(doc_content):
     prompt_template = """
@@ -103,7 +104,7 @@ pdf_files = glob.glob(os.path.join(PATH, "*.pdf"))
 documents_dict ={}
 for path in pdf_files:
     print(path)
-    text = full_book_constraction(path=path,starting_page=300, ending_page=320)
+    text = full_book_constraction(path=path,starting_page=300, ending_page=301)
     documents = documents_constractor(text)
     documents_dict[path] = documents
     
@@ -122,7 +123,7 @@ for doc_name, documents in documents_dict.items():
         )
 
         graph_documents_props = llm_transformer_props.convert_to_graph_documents([doc])
-        graph_documents_props[0].source.metadata['embedding'] = llm_embedder(doc.page_content)
+        graph_documents_props[0].source.metadata['embedding'] = llm_embedder.get_embedding(doc.page_content)
         graph_documents_props[0].source.metadata['chank_number'] = i
         graph_documents_props[0].source.metadata['doc_name'] = doc_name
 
