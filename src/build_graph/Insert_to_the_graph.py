@@ -17,7 +17,7 @@ from config.neo4j_config import ALLOWED_NODES, ALLOWED_RELETIONSHIPS, RELETIONSH
 from langchain_core.documents import Document
 from PyPDF2 import PdfReader
 
-from src.llm import my_OpenAIEmbedding, gpt4o
+from src.llm import my_OpenAIEmbedding, gpt4o,chyper_model
 
 llm_embedder = my_OpenAIEmbedding(model = 'text-embedding-3-small')
 def dump_graph(graph_documents_props,driver:Neo4jGraph):
@@ -28,7 +28,7 @@ def dump_graph(graph_documents_props,driver:Neo4jGraph):
     baseEntityLabel=True, 
     include_source=True)
 
-def full_book_constraction(path,starting_page=0,ending_page=None):
+def full_book_constraction(path,starting_page=160,ending_page=165):
     '''
     This function reads a PDF file and constructs a single string containing the text from the specified page range.
     Parameters:
@@ -49,7 +49,7 @@ def full_book_constraction(path,starting_page=0,ending_page=None):
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 def documents_constractor(full_book):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=2000,
+        chunk_size=1500,
         chunk_overlap=200
         #separators=["\n\n", "\n", " ", ""]
     )
@@ -105,8 +105,9 @@ graph_dict = {}
 pdf_files = glob.glob(os.path.join(PATH, "*.pdf"))
 documents_dict ={}
 for path in pdf_files:
+    if path =='books\How_Not_to_Age.pdf': continue
     print(path)
-    text = full_book_constraction(path=path,starting_page=302, ending_page=303)
+    text = full_book_constraction(path=path,starting_page=166, ending_page=180)
     documents = documents_constractor(text)
     documents_dict[path] = documents
     

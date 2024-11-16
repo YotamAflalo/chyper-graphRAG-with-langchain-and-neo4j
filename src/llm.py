@@ -25,7 +25,7 @@ from config.llm_config import anthropic_chat_model, anthropic_cypher_model
 chat_model = ChatAnthropic(
     model=anthropic_chat_model,
     temperature=0,
-    max_tokens=1024,
+    max_tokens=4096,
     timeout=None,
     max_retries=2,
     api_key= os.getenv('CLAUDE_KEY')
@@ -34,7 +34,7 @@ chat_model = ChatAnthropic(
 chyper_model = ChatAnthropic(
     model=anthropic_cypher_model,
     temperature=0,
-    max_tokens=1024,
+    max_tokens=4096,
     timeout=None,
     max_retries=2,
     api_key= os.getenv('CLAUDE_KEY')

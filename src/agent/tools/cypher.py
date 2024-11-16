@@ -14,27 +14,6 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.prompts.prompt import PromptTemplate
 from langchain.chains.base import Chain
 
-class rerun_CypherQAChain(GraphCypherQAChain):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def _call(self, inputs):
-        try:
-            return super()._call(inputs)
-        except Exception as e:
-            # Get the original question, schema, and Cypher query
-            question = inputs.get("input", "")
-            schema = inputs.get("schema", "")
-            chat_history = inputs.get("chat_history", "")
-            cypher_query = self.cypher_prompt.format_prompt({"question": question, "schema": schema}).to_string()
-
-            # Use the LLM to generate a fixed Cypher query
-            prompt = f"The original Cypher query was: {cypher_query}\nHere is the error: {e}\nPlease provide a corrected Cypher query based on the schema: {schema}\nPrevious conversation history: {chat_history}"
-            fixed_cypher_query = self.llm(prompt)
-
-            # Send the fixed Cypher query to the graph driver
-            result = self.graph.run(fixed_cypher_query)
-            return {"output": result}
 
 CYPHER_GENERATION_TEMPLATE = """
 You are an expert Neo4j Developer translating user questions into Cypher to answer questions about health and diet recommendations.
@@ -42,8 +21,6 @@ Convert the user's question based on the schema.
 
 Use only the provided relationship types and properties in the schema.
 Do not use any other relationship types or properties that are not provided.
-
-Do not return entire nodes or embedding properties.
 
 instractions:
 - ***all the id's starts with capital leter (like "Plant-Based Diet", or "Turmeric")
@@ -55,25 +32,25 @@ Example Cypher Statements:
 1. To find all the thing that can lead to some Disease:
 ```
 MATCH (n)--[r:CAN_LEAD_TO]->(:Disease {{id:'disease name'}}))
-RETURN n.id, r.effect_mechanism
+RETURN n, r;
 ```
 
 2. To find all the thing that can prevent to some Disease:
 ```
 MATCH (n)--[r:CAN_PREVENT]->(:Disease {{id:'disease name'}}))
-RETURN n.id, r.effect_mechanism
+RETURN n, r;
 ```
 
 3. find foods that have the same affact of some drug:
 ```
-MATCH (d:Drug {{id:'Drug name'}})--[r:CAN_PREVENT]->(:Disease)<-[r2:CAN_PREVENT]--(n)
-return n.id, r2.effect_mechanism )
+MATCH (d:Drug {{id:'Drug name'}})-[r:CAN_PREVENT]->(:Disease)<-[r2:CAN_PREVENT]--(n)
+return n, r2 )
 ```
 4. find all the health benefits of some food:
 ```
-MATCH (n:Food {{id:'Food name'}})--[r:CAN_PREVENT|CAN_REDUCE]->(d)
+MATCH (n:Food {{id:'Food name'}})-[r:CAN_PREVENT|CAN_REDUCE]->(d)
 
-RETURN d.id, r.effect_mechanism
+RETURN n,d, r;
 ```
 Schema:
 {schema}
@@ -88,7 +65,7 @@ cypher_qa = GraphCypherQAChain.from_llm(  #rerun_CypherQAChain still dont work a
     verbose=True,
     cypher_prompt=cypher_prompt,
     llm=chat_model,
-    validate_cypher=True
+    # validate_cypher=True
 )
 ####אני צריך להוסיף פה בדיקה, אם זה עובד - נהדר, אם לא - שיעשה ניסוי חוזר
 
