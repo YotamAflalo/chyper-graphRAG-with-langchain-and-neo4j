@@ -18,6 +18,7 @@ from src.utils import get_session_id
 
 from src.agent.tools.vector import get_doc_text
 from src.agent.tools.cypher import cypher_qa
+from src.agent.tools.hybrid import cypher_hybrid
 
 chat_prompt = ChatPromptTemplate.from_messages(
      [
@@ -30,20 +31,26 @@ health_chat = chat_prompt | chat_model | StrOutputParser()
 
 tools = [
      Tool.from_function(
-         name="General Chat",
-         description="For general chat not covered by other tools. Relevant when the user asks a question about your previous answers, which do not require retrieving additional information",
+         name="1.General Chat",
+         description="""For general chat not covered by other tools. Relevant when the user asks a 
+         question about your previous answers, which do not require retrieving additional information""",
          func=health_chat.invoke
      ), 
     Tool.from_function(
-        name="health, diet and nutrition Search",  
+        name="2.health, diet and nutrition Search",  
         description="For when you need to find information about health, diet and nutrition based on books and research",
         func= get_doc_text 
     ),
     Tool.from_function(
-        name="Cypher-graph information",
+        name="3.Cypher-graph information",
         description="Provide information about health and nutrition using Cypher",
         func = cypher_qa
-    )
+    ),
+    Tool.from_function(
+        name="4.find documents base on entity that mantion in the user quastion",
+        description="Provide documents base on the user quastion using Cypher",
+        func = cypher_hybrid
+    ),
 ]
 
 def get_memory(session_id):

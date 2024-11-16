@@ -8,7 +8,7 @@ tools/__pycache__/
 # Virtualenv #
 venv/
 env/
-
+*.pptx
 # Environments #
 .env
 .env.*
